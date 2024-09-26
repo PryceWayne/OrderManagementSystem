@@ -3,6 +3,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+// Register HttpClient and the FedEx services
+builder.Services.AddHttpClient<FedExAuthService>();  // For OAuth authentication
+builder.Services.AddHttpClient<FedExShippingService>();  // For creating shipments
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
