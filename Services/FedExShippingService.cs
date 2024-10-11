@@ -1,20 +1,22 @@
 ﻿using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using OrderManagementSystem.Models;
 
 public class FedExShippingService
 {
     private readonly HttpClient _httpClient;
     private readonly FedExAuthService _authService;
-    private readonly IConfiguration _configuration;
+    private readonly FedExSettings _fedExSettings; // Store FedEx API settings
 
-    public FedExShippingService(HttpClient httpClient, FedExAuthService authService, IConfiguration configuration)
+    // Constructor injection of FedExSettings and other services
+    public FedExShippingService(HttpClient httpClient, FedExAuthService authService, IOptions<FedExSettings> fedExSettings)
     {
         _httpClient = httpClient;
         _authService = authService;
-        _configuration = configuration;
+        _fedExSettings = fedExSettings.Value; // Access the settings values
     }
 
     // Method to create a shipment using FedEx API
@@ -27,8 +29,8 @@ public class FedExShippingService
             return "Failed to authenticate with FedEx.";
         }
 
-        // Fetch the shipment creation URL from appsettings.json
-        var apiUrl = _configuration["FedExApi:BaseUrl"] + _configuration["FedExApi:ShipmentUrl"];
+        // Fetch the shipment creation URL from FedExSettings
+        var apiUrl = _fedExSettings.BaseUrl + _fedExSettings.ShipmentUrl;
 
         // Add the OAuth token to the request headers
         _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
