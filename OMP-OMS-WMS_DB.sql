@@ -1,4 +1,5 @@
--- Create database OMP
+-- Create database OMS
+
 
 /* 
 TO DO
@@ -181,5 +182,6 @@ FOREIGN KEY (Order_ID) REFERENCES Parcel_Outbound(Order_ID));
 
 CREATE TABLE Platform_Order(
 Order_ID varchar(25),
-
+Platfom varchar(50),
+Platfom varchar(50),
 PRIMARY KEY(Order_ID));
