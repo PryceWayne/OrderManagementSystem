@@ -2,8 +2,7 @@
 {
     public class ParcelOutbound
     {
-
-        public string Order_ID { get; set; }
+        public string Order_ID { get; set; }  // Primary Key
         public string Order_Type { get; set; }
         public string Order_Status { get; set; }
         public string Warehouse_ID { get; set; }
@@ -28,7 +27,9 @@
         public DateTime Delivery_Time { get; set; }
         public string Related_Adjustment_Order { get; set; }
 
-        public Warehouse Warehouse { get; set; } // Navigation property
+        public Warehouse Warehouse { get; set; } // Navigation property to Warehouse
+
+        // Add this navigation property to link ParcelOutbound to ParcelProductList
+        public ICollection<ParcelProductList> ParcelProductLists { get; set; } // Navigation property for ParcelProductList
     }
 }
-

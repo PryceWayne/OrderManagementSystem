@@ -2,10 +2,10 @@
 {
     public class Warehouse
     {
-        public string Warehouse_ID { get; set; } // Renamed from 'Warehouse' to 'Warehouse_ID'
-        public string Name { get; set; }         // Changed 'Warehouse' to 'Name'
-        public string Country { get; set; }
-        public string City { get; set; }
-        public string Currency { get; set; }
+        public string Warehouse_ID { get; set; } // Primary Key
+        public string Name { get; set; }         // Name of the warehouse
+        public string Country { get; set; }      // Country where the warehouse is located
+        public string City { get; set; }         // City where the warehouse is located
+        public string Currency { get; set; }     // Currency used in the warehouse
     }
 }

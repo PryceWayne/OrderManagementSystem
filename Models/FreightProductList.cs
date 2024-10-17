@@ -1,13 +1,15 @@
-﻿namespace OrderManagementSystem.Models
+﻿using System;
+
+namespace OrderManagementSystem.Models
 {
     public class FreightProductList
     {
-        public string Order_ID { get; set; }
-        public string Product_ID { get; set; }
-        public int Quantity { get; set; }
+        public string Order_ID { get; set; } // Foreign key reference to FreightOutbound
+        public string Product_ID { get; set; } // Foreign key reference to Inventory
+        public int Quantity { get; set; } // Quantity of the product in the order
 
-        public Inventory Inventory { get; set; } // Navigation property
-        public FreightOutbound FreightOutbound { get; set; } // Navigation property
-
+        // Navigation properties
+        public FreightOutbound FreightOutbound { get; set; } // Relationship to FreightOutbound
+        public Inventory Inventory { get; set; } // Relationship to Inventory
     }
 }

@@ -1,4 +1,7 @@
-﻿namespace OrderManagementSystem.Models
+﻿using System;
+using System.Collections.Generic;
+
+namespace OrderManagementSystem.Models
 {
     public class InboundOrder
     {
@@ -18,5 +21,8 @@
         public string Arrival_Method { get; set; }
 
         public Warehouse Warehouse { get; set; } // Navigation property
+
+        // New property for related InboundProductLists
+        public ICollection<InboundProductList> InboundProductLists { get; set; } // Collection of InboundProductLists
     }
 }
