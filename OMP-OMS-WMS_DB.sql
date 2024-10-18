@@ -207,7 +207,7 @@ INSERT INTO USERS VALUES
     ('U002', 'janedoe', 'password456', 'jane.doe@gmail.com', '2024-01-02'),
     ('U003', 'alyssajones', 'password789', 'alicejones@hotmail.com', '2024-01-03'),
     ('U004', 'robertsmith', 'password321', 'rsmith@outlook.com', '2024-01-04'),
-    ('U005', 'carlysimon', 'password654', 'charlie.white@gmail.com', '2024-01-05');
+    ('U005', 'carlysimon', 'password654', 'carly.simon@gmail.com', '2024-01-05');
     
 INSERT INTO Warehouse VALUES
     ('W001', 'NYC Warehouse', 'United States', 'New York', 'USD'),
@@ -244,4 +244,9 @@ INSERT INTO Cost_Based_Billing VALUES
     ('BA004', 'CC004'),
     ('BA005', 'CC005');
 
-
+INSERT INTO Freight_Outbound VALUES
+    ('FO001', 'Awaiting', 'U001', 'W001', 100, '2024-10-01', '2024-10-15', '2024-10-11', 150.00, 'USD', 'Michael Turner', '10001', 'Others', 'Amazon', 'FedEx', 5, 'RAO001', '123456789', 'REF001', 'FBA001', '2564', 'By product'),
+    ('FO002', 'Completed', 'U002', 'W002', 200, '2024-09-01', '2024-09-10', '2024-09-05', 300.00, 'EUR', 'Emily Davis', '10117', 'FBA', 'eBay', 'DHL', 7, 'RAO002', '234567891', 'REF002', 'FBA002', '4579', 'By carton'),
+    ('FO003', 'Void', 'U003', 'W003', 150, '2024-08-05', '2024-08-12', '2024-08-07', 250.00, 'JPY', 'David Lee', '160-0022', 'Others', 'Walmart', 'UPS', 4, 'RAO003', '345678912', 'REF003', 'FBA003', '3689', 'By product'),
+    ('FO004', 'Exceptions', 'U004', 'W004', 75, '2024-07-10', '2024-07-17', '2024-07-11', 100.00, 'USD', 'Sophia Martin', '47710', 'FBA', 'Target', 'USPS', 3, 'RAO004', '456789123', 'REF004', 'FBA004', '4785', 'By carton'),
+    ('FO005', 'Completed', 'U005', 'W005', 120, '2024-06-02', '2024-06-08', '2024-06-04', 180.00, 'AUD', 'Oliver Brown', '2000', 'Others', 'Etsy', 'Australia Post', 6, 'RAO005', '567891234', 'REF005', 'FBA005', '5698', 'By product');
