@@ -200,6 +200,21 @@ CREATE TABLE Platform_Order (
     PRIMARY KEY (Order_ID)
 );
 
+CREATE TABLE Recharge (
+    Recharge_Flow_Number VARCHAR(25),
+    Customer_Code VARCHAR(25),
+    Recharge_Amount DECIMAL(10,2),
+    Status VARCHAR(25),
+    User_ID VARCHAR(25), # Initiator
+    Payment_Method VARCHAR(25),
+    Submission_Time DATETIME,
+    Audit_Remark VARCHAR(25),
+    Apply_For_Remark VARCHAR(25),
+    PRIMARY KEY (Recharge_Flow_Number),
+    FOREIGN KEY (User_ID) REFERENCES USERS(User_ID)
+);
+
+
 # Populate tables with dummy data.
 
 INSERT INTO USERS (User_ID, Username, Password, Email, Date_Created) VALUES
@@ -317,3 +332,10 @@ INSERT INTO User_Roles (User_ID, Role_ID) VALUES
     ('U003', 'R001'),
     ('U004', 'R002'),
     ('U005', 'R002');
+
+INSERT INTO Recharge (Recharge_Flow_Number, Customer_Code, Recharge_Amount, Status, User_ID, Payment_Method, Submission_Time, Audit_Remark, Apply_For_Remark) VALUES
+    ('R001', 'CUST001', 100.00, 'Awaiting', 'U001', 'Bank Transfer', '2024-10-01 09:30:00', 'N/A', 'Awaiting confirmation'),
+    ('R002', 'CUST002', 250.00, 'Awaiting', 'U002', 'Bank Transfer', '2024-10-02 10:15:00', 'N/A', 'Awaiting confirmation'),
+    ('R003', 'CUST003', 50.00, 'Rejected', 'U003', 'Bank Transfer', '2024-10-03 11:00:00', 'Insufficient funds', 'Recharge rejected'),
+    ('R004', 'CUST004', 300.00, 'Reviewed', 'U004', 'WeChat', '2024-10-04 12:45:00', 'N/A', 'Recharge reviewed'),
+    ('R005', 'CUST005', 150.00, 'Awaiting', 'U005', 'WeChat', '2024-10-05 14:20:00', 'N/A', 'Awaiting confirmation');
