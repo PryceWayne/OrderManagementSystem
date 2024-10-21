@@ -339,3 +339,48 @@ INSERT INTO Recharge (Recharge_Flow_Number, Customer_Code, Recharge_Amount, Stat
     ('R003', 'CUST003', 50.00, 'Rejected', 'U003', 'Bank Transfer', '2024-10-03 11:00:00', 'Insufficient funds', 'Recharge rejected'),
     ('R004', 'CUST004', 300.00, 'Reviewed', 'U004', 'WeChat', '2024-10-04 12:45:00', 'N/A', 'Recharge reviewed'),
     ('R005', 'CUST005', 150.00, 'Awaiting', 'U005', 'WeChat', '2024-10-05 14:20:00', 'N/A', 'Awaiting confirmation');
+    
+use OMS;
+CREATE VIEW Inbound AS SELECT Inbound_Order_ID AS "Order ID", Order_Status AS "Status", USERS.Username AS "Creator", Warehouse.Warehouse_Name AS "Warehouse", Cost, Inbound_Orders.Currency, Tracking_Number AS "Tracking Number", Reference_Order_Number AS "Reference Order Number", Estimated_Arrival AS "Expected Arrival", Inbound_Product_List.Quantity, boxes AS "Boxes", Creation_Date AS "Creation Date", Inbound_Type AS "Inbound Type", Arrival_Method AS "Arrival Method"
+FROM Inbound_Orders INNER JOIN Warehouse ON Inbound_Orders.Warehouse_ID= Warehouse.Warehouse_ID INNER JOIN USERS ON Inbound_Orders.User_ID=USERS.User_ID INNER JOIN Inbound_Product_List ON Inbound_Orders.Inbound_Order_ID=Inbound_Product_List.Order_ID;
+select * FROM Inbound;
+
+CREATE VIEW Parcel AS SELECT Order_ID AS "Order ID", USERS.Username AS "Creator", Warehouse.Warehouse_Name AS "Warehouse", Order_status AS "Order Status", Platform,  
+Estimated_Delivery_Date AS "Expected Delivery", Ship_Date AS "Ship Date", Transport_Days AS "Transport Days", Cost, Parcel_Outbound.Currency, 
+Recipient, Parcel_Outbound.Country, Postcode, Tracking_Number AS "Tracking Number", Reference_Order_Number AS "Reference Order Number", Related_Adjustment_Order AS "Related Adjustment Order", Creation_Date AS "Creation Date", 
+boxes AS "Boxes", Shipping_Company AS "Shipping Company", Latest_Information AS "Latest Information", Tracking_Update_Time AS "Tracking Update Time", 
+INternet_Posting_Time AS "Internet Posting Time", Delivery_Time AS "Delivery Time"
+FROM Parcel_Outbound INNER JOIN Warehouse ON Parcel_Outbound.Warehouse_ID= Warehouse.Warehouse_ID INNER JOIN USERS ON Parcel_Outbound.User_ID=USERS.User_ID;
+SELECT * FROM Parcel;
+
+
+CREATE VIEW Freight AS SELECT Outbound_Order_ID AS "Order ID", USERS.Username AS "Creator", Warehouse.Warehouse_Name AS "Warehouse", Order_Status AS "Order_Status", Cost, Freight_Outbound.Currency, Outbound_Method AS "Outbound Method",
+Related_Adjustment_Order AS "Related Adjustment Order Number", Tracking_Number AS "Tracking Number", Reference_Order_Number AS "Reference Order Number", Creation_Date AS "Creation Date", Estimated_Delivery_Date AS "Expected Delivery", Order_Ship_Date AS "Ship Date", Recipient, Recipient_Post_Code AS "Post Code",
+Destination_Type AS "Destination Type", Platform, Shipping_company AS "Shipping Company", Transport_Days AS "Transport Days", FBA_Shipment_ID AS "FBA Shipment ID", FBA_Tracking_Number AS "FBA Tracking Number"
+FROM Freight_Outbound INNER JOIN Warehouse ON Freight_Outbound.Warehouse_ID= Warehouse.Warehouse_ID INNER JOIN USERS ON Freight_Outbound.User_ID=USERS.User_ID;
+SELECT * FROM Freight;
+
+#Need to finish Platform Order View and table
+CREATE VIEW Platform_Orders AS SELECT Order_ID AS "Order ID", USERS.Username AS "Creator", Warehouse.Warehouse AS "Warehouse" FROM Platform_Order INNER JOIN Warehouse ON PLatform_Order.Warehouse_ID= Warehouse.Warehouse_ID INNER JOIN USERS ON PLatform_Order.User_ID=USERS.User_ID;
+
+CREATE VIEW User_List AS SELECT USERS.User_ID AS "User ID", Username, Roles.Role AS "Role", Email, Password, Date_Created AS "Date Created"
+FROM USERS INNER JOIN User_Roles ON USERS.User_ID = User_Roles.User_ID INNER JOIN Roles ON User_Roles.Role_ID= Roles.Role_ID;
+SELECT * FROM User_List;
+DROP VIEW USer_List;
+
+CREATE VIEW Warehouses AS SELECT Warehouse_ID AS "Warehouse ID", Warehouse_Name, Country, City, Currency FROM Warehouse;
+DROP VIEW WArehouse;
+SELECT * FROM Warehouses;
+
+CREATE VIEW Inventory_List AS SELECT Product_ID AS "Product ID", Product_Name AS "Product Name", SKU, Warehouse.Warehouse_Name, Product_Description AS "Product Description" FROM Inventory INNER JOIN Warehouse ON Inventory.Warehouse_ID= Warehouse.Warehouse_ID;
+SELECT * FROM Inventory_List;
+DROP VIEW INventory_List;
+
+#NEED TO CREATE CUSTOMER TABLE FIRST
+#CREATE VIEW Customer_List AS SELECT FROM Customers;
+
+CREATE VIEW Charge_list AS SELECT Charge_ID AS "Charge ID", Charge, Amount AS "Cost", Type AS "Charge Type", Description AS "Description" FROM Charges;
+SELECT * FROM Charge_List;
+
+CREATE VIEW Billing_List AS SELECT Billing_ID AS "Billing ID", USERS.Username AS "User", Charges.Charge FROM Billing INNER JOIN Billing_Account ON Billing.Billing_Account_ID = Billing_Account.Billing_Account_ID INNER JOIN Charges ON Billing.Charge_ID= Charges.Charge_ID INNER JOIN USERS ON USERS.User_ID = Billing_Account.User_ID;
+Select * FROM Billing_List;
