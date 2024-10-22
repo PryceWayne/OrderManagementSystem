@@ -1,15 +1,23 @@
-﻿namespace OrderManagementSystem.Models
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+
+namespace OrderManagementSystem.Models
 {
     public class BillingAccount
     {
-        public string Billing_Account_ID { get; set; }  // Unique ID for the billing account (Primary Key)
-        public string User_ID { get; set; }              // Foreign key reference to User
-        public double Account_Balance { get; set; }      // Balance amount
+        [Key]
+        public string Billing_Account_ID { get; set; }  // Primary Key
 
-        // Navigation property to User
-        public User User { get; set; }                   // Assuming you have a User class
+        [Required]
+        public string User_ID { get; set; }  // Foreign key to User
 
-        // Navigation property to Billing
-        public ICollection<Billing> Billings { get; set; } // Collection of Billing records
+        public double Account_Balance { get; set; }
+
+        // Navigation properties
+        public User User { get; set; }
+
+        public ICollection<Billing> Billings { get; set; } = new List<Billing>();
+        public ICollection<Cost_Based_Billing> Cost_Based_Billings { get; set; } = new List<Cost_Based_Billing>();
+        public ICollection<Order_Based_Billing> Order_Based_Billings { get; set; } = new List<Order_Based_Billing>();
     }
 }

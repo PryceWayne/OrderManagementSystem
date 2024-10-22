@@ -1,15 +1,16 @@
-﻿using System;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OrderManagementSystem.Models
 {
     public class FreightProductList
     {
-        public string Order_ID { get; set; } // Foreign key reference to FreightOutbound
-        public string Product_ID { get; set; } // Foreign key reference to Inventory
-        public int Quantity { get; set; } // Quantity of the product in the order
+        public string Order_ID { get; set; } // Foreign Key to FreightOutbound
+        public string Product_ID { get; set; } // Foreign Key to Inventory
 
-        // Navigation properties
-        public FreightOutbound FreightOutbound { get; set; } // Relationship to FreightOutbound
-        public Inventory Inventory { get; set; } // Relationship to Inventory
+        public int Quantity { get; set; }
+
+        // Navigation Properties
+        public FreightOutbound FreightOutbound { get; set; }
+        public Inventory Inventory { get; set; }
     }
 }
