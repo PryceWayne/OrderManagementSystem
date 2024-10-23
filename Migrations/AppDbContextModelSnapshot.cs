@@ -24,14 +24,14 @@ namespace OrderManagementSystem.Migrations
 
             modelBuilder.Entity("OrderManagementSystem.Models.Billing", b =>
                 {
-                    b.Property<string>("Billing_ID")
+                    b.Property<string>("BillingId")
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
                     b.Property<double>("Amount")
                         .HasColumnType("float");
 
-                    b.Property<string>("Billing_Account_ID")
+                    b.Property<string>("BillingAccountId")
                         .IsRequired()
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
@@ -39,42 +39,37 @@ namespace OrderManagementSystem.Migrations
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("User_ID")
-                        .HasColumnType("nvarchar(25)");
+                    b.HasKey("BillingId");
 
-                    b.HasKey("Billing_ID");
-
-                    b.HasIndex("Billing_Account_ID");
-
-                    b.HasIndex("User_ID");
+                    b.HasIndex("BillingAccountId");
 
                     b.ToTable("Billings");
                 });
 
             modelBuilder.Entity("OrderManagementSystem.Models.BillingAccount", b =>
                 {
-                    b.Property<string>("Billing_Account_ID")
+                    b.Property<string>("BillingAccountId")
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
-                    b.Property<double>("Account_Balance")
+                    b.Property<double>("AccountBalance")
                         .HasColumnType("float");
 
-                    b.Property<string>("User_ID")
+                    b.Property<string>("UserId")
                         .IsRequired()
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
-                    b.HasKey("Billing_Account_ID");
+                    b.HasKey("BillingAccountId");
 
-                    b.HasIndex("User_ID");
+                    b.HasIndex("UserId");
 
                     b.ToTable("BillingAccounts");
                 });
 
             modelBuilder.Entity("OrderManagementSystem.Models.Cost", b =>
                 {
-                    b.Property<string>("Cost_ID")
+                    b.Property<string>("CostId")
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
@@ -86,31 +81,31 @@ namespace OrderManagementSystem.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.HasKey("Cost_ID");
+                    b.HasKey("CostId");
 
                     b.ToTable("Costs");
                 });
 
-            modelBuilder.Entity("OrderManagementSystem.Models.Cost_Based_Billing", b =>
+            modelBuilder.Entity("OrderManagementSystem.Models.CostBasedBilling", b =>
                 {
-                    b.Property<string>("Billing_Account_ID")
+                    b.Property<string>("BillingAccountId")
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
-                    b.Property<string>("Cost_Charge_ID")
+                    b.Property<string>("CostChargeId")
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
-                    b.HasKey("Billing_Account_ID", "Cost_Charge_ID");
+                    b.HasKey("BillingAccountId", "CostChargeId");
 
-                    b.HasIndex("Cost_Charge_ID");
+                    b.HasIndex("CostChargeId");
 
-                    b.ToTable("Cost_Based_Billings");
+                    b.ToTable("CostBasedBillings");
                 });
 
-            modelBuilder.Entity("OrderManagementSystem.Models.Cost_Based_Charges", b =>
+            modelBuilder.Entity("OrderManagementSystem.Models.CostBasedCharge", b =>
                 {
-                    b.Property<string>("Cost_Charge_ID")
+                    b.Property<string>("CostChargeId")
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
@@ -122,24 +117,24 @@ namespace OrderManagementSystem.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.HasKey("Cost_Charge_ID");
+                    b.HasKey("CostChargeId");
 
-                    b.ToTable("Cost_Based_Charges");
+                    b.ToTable("CostBasedCharges");
                 });
 
             modelBuilder.Entity("OrderManagementSystem.Models.FreightOutbound", b =>
                 {
-                    b.Property<string>("Outbound_Order_ID")
+                    b.Property<string>("OutboundOrderId")
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
                     b.Property<double>("Cost")
                         .HasColumnType("float");
 
-                    b.Property<DateTime>("Creation_Date")
+                    b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Creator")
+                    b.Property<string>("CreatorId")
                         .IsRequired()
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
@@ -149,38 +144,28 @@ namespace OrderManagementSystem.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("Destination_Type")
+                    b.Property<string>("DestinationType")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<DateTime>("Estimated_Delivery_Date")
+                    b.Property<DateTime>("EstimatedDeliveryDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("FBA_Shipment_ID")
-                        .IsRequired()
-                        .HasMaxLength(25)
-                        .HasColumnType("nvarchar(25)");
-
-                    b.Property<string>("FBA_Tracking_Number")
-                        .IsRequired()
-                        .HasMaxLength(25)
-                        .HasColumnType("nvarchar(25)");
-
-                    b.Property<DateTime>("Order_Ship_Date")
+                    b.Property<DateTime>("OrderShipDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Order_Status")
+                    b.Property<string>("OrderStatus")
                         .IsRequired()
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
-                    b.Property<string>("Order_Type")
+                    b.Property<string>("OrderType")
                         .IsRequired()
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
-                    b.Property<string>("Outbound_Method")
+                    b.Property<string>("OutboundMethod")
                         .IsRequired()
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
@@ -190,7 +175,7 @@ namespace OrderManagementSystem.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("Product_Quantity")
+                    b.Property<int>("ProductQuantity")
                         .HasColumnType("int");
 
                     b.Property<string>("Recipient")
@@ -198,73 +183,73 @@ namespace OrderManagementSystem.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("Recipient_Post_Code")
+                    b.Property<string>("RecipientPostCode")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("Reference_Order_Number")
+                    b.Property<string>("ReferenceOrderNumber")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<string>("Related_Adjustment_Order")
+                    b.Property<string>("RelatedAdjustmentOrder")
                         .IsRequired()
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
-                    b.Property<string>("Shipping_Company")
+                    b.Property<string>("ShippingCompany")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("Tracking_Number")
+                    b.Property<string>("TrackingNumber")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<int>("Transport_Days")
+                    b.Property<int>("TransportDays")
                         .HasColumnType("int");
 
-                    b.Property<string>("Warehouse_ID")
+                    b.Property<string>("WarehouseId")
                         .IsRequired()
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
-                    b.HasKey("Outbound_Order_ID");
+                    b.HasKey("OutboundOrderId");
 
-                    b.HasIndex("Creator");
+                    b.HasIndex("CreatorId");
 
-                    b.HasIndex("Warehouse_ID");
+                    b.HasIndex("WarehouseId");
 
                     b.ToTable("FreightOutbounds");
                 });
 
             modelBuilder.Entity("OrderManagementSystem.Models.FreightProductList", b =>
                 {
-                    b.Property<string>("Order_ID")
+                    b.Property<string>("OrderId")
                         .HasColumnType("nvarchar(25)");
 
-                    b.Property<string>("Product_ID")
+                    b.Property<string>("ProductId")
                         .HasColumnType("nvarchar(25)");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.HasKey("Order_ID", "Product_ID");
+                    b.HasKey("OrderId", "ProductId");
 
-                    b.HasIndex("Product_ID");
+                    b.HasIndex("ProductId");
 
                     b.ToTable("FreightProductLists");
                 });
 
-            modelBuilder.Entity("OrderManagementSystem.Models.InboundOrders", b =>
+            modelBuilder.Entity("OrderManagementSystem.Models.InboundOrder", b =>
                 {
-                    b.Property<string>("Inbound_Order_ID")
+                    b.Property<string>("InboundOrderId")
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
-                    b.Property<string>("Arrival_Method")
+                    b.Property<string>("ArrivalMethod")
                         .IsRequired()
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
@@ -275,10 +260,10 @@ namespace OrderManagementSystem.Migrations
                     b.Property<double>("Cost")
                         .HasColumnType("float");
 
-                    b.Property<DateTime>("Creation_Date")
+                    b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Creator")
+                    b.Property<string>("CreatorId")
                         .IsRequired()
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
@@ -288,76 +273,76 @@ namespace OrderManagementSystem.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<DateTime>("Estimated_Arrival")
+                    b.Property<DateTime>("EstimatedArrival")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Inbound_Type")
+                    b.Property<string>("InboundType")
                         .IsRequired()
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
-                    b.Property<string>("Order_Status")
+                    b.Property<string>("OrderStatus")
                         .IsRequired()
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
-                    b.Property<int>("Product_Quantity")
+                    b.Property<int>("ProductQuantity")
                         .HasColumnType("int");
 
-                    b.Property<string>("Reference_Order_Number")
+                    b.Property<string>("ReferenceOrderNumber")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<string>("Tracking_Number")
+                    b.Property<string>("TrackingNumber")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<string>("Warehouse_ID")
+                    b.Property<string>("WarehouseId")
                         .IsRequired()
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
-                    b.HasKey("Inbound_Order_ID");
+                    b.HasKey("InboundOrderId");
 
-                    b.HasIndex("Creator");
+                    b.HasIndex("CreatorId");
 
-                    b.HasIndex("Warehouse_ID");
+                    b.HasIndex("WarehouseId");
 
                     b.ToTable("InboundOrders");
                 });
 
             modelBuilder.Entity("OrderManagementSystem.Models.InboundProductList", b =>
                 {
-                    b.Property<string>("Order_ID")
+                    b.Property<string>("OrderId")
                         .HasColumnType("nvarchar(25)");
 
-                    b.Property<string>("Product_ID")
+                    b.Property<string>("ProductId")
                         .HasColumnType("nvarchar(25)");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.HasKey("Order_ID", "Product_ID");
+                    b.HasKey("OrderId", "ProductId");
 
-                    b.HasIndex("Product_ID");
+                    b.HasIndex("ProductId");
 
                     b.ToTable("InboundProductLists");
                 });
 
             modelBuilder.Entity("OrderManagementSystem.Models.Inventory", b =>
                 {
-                    b.Property<string>("Product_ID")
+                    b.Property<string>("ProductId")
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
-                    b.Property<string>("Product_Description")
+                    b.Property<string>("ProductDescription")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<string>("Product_Name")
+                    b.Property<string>("ProductName")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
@@ -367,38 +352,75 @@ namespace OrderManagementSystem.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("Warehouse_ID")
+                    b.Property<string>("WarehouseId")
                         .IsRequired()
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
-                    b.HasKey("Product_ID");
+                    b.HasKey("ProductId");
 
-                    b.HasIndex("Warehouse_ID");
+                    b.HasIndex("WarehouseId");
 
                     b.ToTable("Inventories");
                 });
 
-            modelBuilder.Entity("OrderManagementSystem.Models.Order_Based_Billing", b =>
+            modelBuilder.Entity("OrderManagementSystem.Models.Order", b =>
                 {
-                    b.Property<string>("Billing_Account_ID")
+                    b.Property<string>("OrderId")
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
-                    b.Property<string>("Order_Charge_ID")
+                    b.Property<string>("CustomerId")
+                        .IsRequired()
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
-                    b.HasKey("Billing_Account_ID", "Order_Charge_ID");
+                    b.Property<DateTime>("OrderDate")
+                        .HasColumnType("datetime2");
 
-                    b.HasIndex("Order_Charge_ID");
+                    b.Property<string>("OrderStatus")
+                        .IsRequired()
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)");
 
-                    b.ToTable("Order_Based_Billings");
+                    b.Property<DateTime?>("ShippedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double>("TotalAmount")
+                        .HasColumnType("float");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)");
+
+                    b.HasKey("OrderId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("OrderManagementSystem.Models.Order_Based_Charges", b =>
+            modelBuilder.Entity("OrderManagementSystem.Models.OrderBasedBilling", b =>
                 {
-                    b.Property<string>("Order_Charge_ID")
+                    b.Property<string>("BillingAccountId")
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)");
+
+                    b.Property<string>("OrderChargeId")
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)");
+
+                    b.HasKey("BillingAccountId", "OrderChargeId");
+
+                    b.HasIndex("OrderChargeId");
+
+                    b.ToTable("OrderBasedBillings");
+                });
+
+            modelBuilder.Entity("OrderManagementSystem.Models.OrderBasedCharge", b =>
+                {
+                    b.Property<string>("OrderChargeId")
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
@@ -410,14 +432,37 @@ namespace OrderManagementSystem.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.HasKey("Order_Charge_ID");
+                    b.HasKey("OrderChargeId");
 
-                    b.ToTable("Order_Based_Charges");
+                    b.ToTable("OrderBasedCharges");
+                });
+
+            modelBuilder.Entity("OrderManagementSystem.Models.OrderItem", b =>
+                {
+                    b.Property<string>("OrderId")
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)");
+
+                    b.Property<string>("ProductId")
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<double>("UnitPrice")
+                        .HasColumnType("float");
+
+                    b.HasKey("OrderId", "ProductId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("OrderManagementSystem.Models.ParcelOutbound", b =>
                 {
-                    b.Property<string>("Order_ID")
+                    b.Property<string>("OrderId")
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
@@ -432,10 +477,10 @@ namespace OrderManagementSystem.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<DateTime>("Creation_Date")
+                    b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Creator")
+                    b.Property<string>("CreatorId")
                         .IsRequired()
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
@@ -445,26 +490,26 @@ namespace OrderManagementSystem.Migrations
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
-                    b.Property<DateTime>("Delivery_Time")
+                    b.Property<DateTime>("DeliveryTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("Estimated_Delivery_Date")
+                    b.Property<DateTime>("EstimatedDeliveryDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("Internet_Posting_Time")
+                    b.Property<DateTime>("InternetPostingTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Latest_Information")
+                    b.Property<string>("LatestInformation")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<string>("Order_Status")
+                    b.Property<string>("OrderStatus")
                         .IsRequired()
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
-                    b.Property<string>("Order_Type")
+                    b.Property<string>("OrderType")
                         .IsRequired()
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
@@ -484,81 +529,81 @@ namespace OrderManagementSystem.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("Reference_Order_Number")
+                    b.Property<string>("ReferenceOrderNumber")
                         .IsRequired()
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
-                    b.Property<string>("Related_Adjustment_Order")
+                    b.Property<string>("RelatedAdjustmentOrder")
                         .IsRequired()
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
-                    b.Property<DateTime>("Ship_Date")
+                    b.Property<DateTime>("ShipDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Shipping_Company")
+                    b.Property<string>("ShippingCompany")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("Tracking_Number")
+                    b.Property<string>("TrackingNumber")
                         .IsRequired()
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
-                    b.Property<DateTime>("Tracking_Update_Time")
+                    b.Property<DateTime>("TrackingUpdateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Transport_Days")
+                    b.Property<int>("TransportDays")
                         .HasColumnType("int");
 
-                    b.Property<string>("Warehouse_ID")
+                    b.Property<string>("WarehouseId")
                         .IsRequired()
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
-                    b.HasKey("Order_ID");
+                    b.HasKey("OrderId");
 
-                    b.HasIndex("Creator");
+                    b.HasIndex("CreatorId");
 
-                    b.HasIndex("Warehouse_ID");
+                    b.HasIndex("WarehouseId");
 
                     b.ToTable("ParcelOutbounds");
                 });
 
             modelBuilder.Entity("OrderManagementSystem.Models.ParcelProductList", b =>
                 {
-                    b.Property<string>("Order_ID")
+                    b.Property<string>("OrderId")
                         .HasColumnType("nvarchar(25)");
 
-                    b.Property<string>("Product_ID")
+                    b.Property<string>("ProductId")
                         .HasColumnType("nvarchar(25)");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.HasKey("Order_ID", "Product_ID");
+                    b.HasKey("OrderId", "ProductId");
 
-                    b.HasIndex("Product_ID");
+                    b.HasIndex("ProductId");
 
                     b.ToTable("ParcelProductLists");
                 });
 
             modelBuilder.Entity("OrderManagementSystem.Models.PlatformOrder", b =>
                 {
-                    b.Property<string>("Order_ID")
+                    b.Property<string>("OrderId")
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
-                    b.HasKey("Order_ID");
+                    b.HasKey("OrderId");
 
                     b.ToTable("PlatformOrders");
                 });
 
-            modelBuilder.Entity("OrderManagementSystem.Models.Roles", b =>
+            modelBuilder.Entity("OrderManagementSystem.Models.Role", b =>
                 {
-                    b.Property<string>("Role_ID")
+                    b.Property<string>("RoleId")
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
@@ -567,23 +612,23 @@ namespace OrderManagementSystem.Migrations
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
-                    b.Property<string>("Role_Description")
+                    b.Property<string>("RoleDescription")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.HasKey("Role_ID");
+                    b.HasKey("RoleId");
 
                     b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("OrderManagementSystem.Models.User", b =>
                 {
-                    b.Property<string>("User_ID")
+                    b.Property<string>("UserId")
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
-                    b.Property<DateTime>("Date_Created")
+                    b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
@@ -601,29 +646,29 @@ namespace OrderManagementSystem.Migrations
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
-                    b.HasKey("User_ID");
+                    b.HasKey("UserId");
 
                     b.ToTable("Users");
                 });
 
             modelBuilder.Entity("OrderManagementSystem.Models.UserRole", b =>
                 {
-                    b.Property<string>("User_ID")
+                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(25)");
 
-                    b.Property<string>("Role_ID")
+                    b.Property<string>("RoleId")
                         .HasColumnType("nvarchar(25)");
 
-                    b.HasKey("User_ID", "Role_ID");
+                    b.HasKey("UserId", "RoleId");
 
-                    b.HasIndex("Role_ID");
+                    b.HasIndex("RoleId");
 
                     b.ToTable("UserRoles");
                 });
 
             modelBuilder.Entity("OrderManagementSystem.Models.Warehouse", b =>
                 {
-                    b.Property<string>("Warehouse_ID")
+                    b.Property<string>("WarehouseId")
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
@@ -647,7 +692,7 @@ namespace OrderManagementSystem.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("Warehouse_ID");
+                    b.HasKey("WarehouseId");
 
                     b.ToTable("Warehouses");
                 });
@@ -656,13 +701,9 @@ namespace OrderManagementSystem.Migrations
                 {
                     b.HasOne("OrderManagementSystem.Models.BillingAccount", "BillingAccount")
                         .WithMany("Billings")
-                        .HasForeignKey("Billing_Account_ID")
+                        .HasForeignKey("BillingAccountId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.HasOne("OrderManagementSystem.Models.User", null)
-                        .WithMany("Billings")
-                        .HasForeignKey("User_ID");
 
                     b.Navigation("BillingAccount");
                 });
@@ -671,47 +712,47 @@ namespace OrderManagementSystem.Migrations
                 {
                     b.HasOne("OrderManagementSystem.Models.User", "User")
                         .WithMany("BillingAccounts")
-                        .HasForeignKey("User_ID")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("OrderManagementSystem.Models.Cost_Based_Billing", b =>
+            modelBuilder.Entity("OrderManagementSystem.Models.CostBasedBilling", b =>
                 {
                     b.HasOne("OrderManagementSystem.Models.BillingAccount", "BillingAccount")
-                        .WithMany("Cost_Based_Billings")
-                        .HasForeignKey("Billing_Account_ID")
+                        .WithMany("CostBasedBillings")
+                        .HasForeignKey("BillingAccountId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("OrderManagementSystem.Models.Cost_Based_Charges", "Cost_Based_Charges")
+                    b.HasOne("OrderManagementSystem.Models.CostBasedCharge", "CostBasedCharge")
                         .WithMany()
-                        .HasForeignKey("Cost_Charge_ID")
+                        .HasForeignKey("CostChargeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("BillingAccount");
 
-                    b.Navigation("Cost_Based_Charges");
+                    b.Navigation("CostBasedCharge");
                 });
 
             modelBuilder.Entity("OrderManagementSystem.Models.FreightOutbound", b =>
                 {
-                    b.HasOne("OrderManagementSystem.Models.User", "User")
+                    b.HasOne("OrderManagementSystem.Models.User", "Creator")
                         .WithMany()
-                        .HasForeignKey("Creator")
+                        .HasForeignKey("CreatorId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("OrderManagementSystem.Models.Warehouse", "Warehouse")
                         .WithMany("FreightOutbounds")
-                        .HasForeignKey("Warehouse_ID")
+                        .HasForeignKey("WarehouseId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("Creator");
 
                     b.Navigation("Warehouse");
                 });
@@ -720,13 +761,13 @@ namespace OrderManagementSystem.Migrations
                 {
                     b.HasOne("OrderManagementSystem.Models.FreightOutbound", "FreightOutbound")
                         .WithMany("FreightProductLists")
-                        .HasForeignKey("Order_ID")
+                        .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("OrderManagementSystem.Models.Inventory", "Inventory")
                         .WithMany("FreightProductLists")
-                        .HasForeignKey("Product_ID")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -735,36 +776,36 @@ namespace OrderManagementSystem.Migrations
                     b.Navigation("Inventory");
                 });
 
-            modelBuilder.Entity("OrderManagementSystem.Models.InboundOrders", b =>
+            modelBuilder.Entity("OrderManagementSystem.Models.InboundOrder", b =>
                 {
-                    b.HasOne("OrderManagementSystem.Models.User", "User")
+                    b.HasOne("OrderManagementSystem.Models.User", "Creator")
                         .WithMany()
-                        .HasForeignKey("Creator")
+                        .HasForeignKey("CreatorId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("OrderManagementSystem.Models.Warehouse", "Warehouse")
                         .WithMany("InboundOrders")
-                        .HasForeignKey("Warehouse_ID")
+                        .HasForeignKey("WarehouseId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("Creator");
 
                     b.Navigation("Warehouse");
                 });
 
             modelBuilder.Entity("OrderManagementSystem.Models.InboundProductList", b =>
                 {
-                    b.HasOne("OrderManagementSystem.Models.InboundOrders", "InboundOrder")
+                    b.HasOne("OrderManagementSystem.Models.InboundOrder", "InboundOrder")
                         .WithMany("InboundProductLists")
-                        .HasForeignKey("Order_ID")
+                        .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("OrderManagementSystem.Models.Inventory", "Inventory")
                         .WithMany("InboundProductLists")
-                        .HasForeignKey("Product_ID")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -777,47 +818,77 @@ namespace OrderManagementSystem.Migrations
                 {
                     b.HasOne("OrderManagementSystem.Models.Warehouse", "Warehouse")
                         .WithMany("Inventories")
-                        .HasForeignKey("Warehouse_ID")
+                        .HasForeignKey("WarehouseId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Warehouse");
                 });
 
-            modelBuilder.Entity("OrderManagementSystem.Models.Order_Based_Billing", b =>
+            modelBuilder.Entity("OrderManagementSystem.Models.Order", b =>
+                {
+                    b.HasOne("OrderManagementSystem.Models.User", "User")
+                        .WithMany("Orders")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("OrderManagementSystem.Models.OrderBasedBilling", b =>
                 {
                     b.HasOne("OrderManagementSystem.Models.BillingAccount", "BillingAccount")
-                        .WithMany("Order_Based_Billings")
-                        .HasForeignKey("Billing_Account_ID")
+                        .WithMany("OrderBasedBillings")
+                        .HasForeignKey("BillingAccountId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("OrderManagementSystem.Models.Order_Based_Charges", "Order_Based_Charges")
+                    b.HasOne("OrderManagementSystem.Models.OrderBasedCharge", "OrderBasedCharge")
                         .WithMany()
-                        .HasForeignKey("Order_Charge_ID")
+                        .HasForeignKey("OrderChargeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("BillingAccount");
 
-                    b.Navigation("Order_Based_Charges");
+                    b.Navigation("OrderBasedCharge");
+                });
+
+            modelBuilder.Entity("OrderManagementSystem.Models.OrderItem", b =>
+                {
+                    b.HasOne("OrderManagementSystem.Models.Order", "Order")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("OrderManagementSystem.Models.Inventory", "Inventory")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Inventory");
+
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("OrderManagementSystem.Models.ParcelOutbound", b =>
                 {
-                    b.HasOne("OrderManagementSystem.Models.User", "User")
+                    b.HasOne("OrderManagementSystem.Models.User", "Creator")
                         .WithMany()
-                        .HasForeignKey("Creator")
+                        .HasForeignKey("CreatorId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("OrderManagementSystem.Models.Warehouse", "Warehouse")
                         .WithMany("ParcelOutbounds")
-                        .HasForeignKey("Warehouse_ID")
+                        .HasForeignKey("WarehouseId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("Creator");
 
                     b.Navigation("Warehouse");
                 });
@@ -826,13 +897,13 @@ namespace OrderManagementSystem.Migrations
                 {
                     b.HasOne("OrderManagementSystem.Models.ParcelOutbound", "ParcelOutbound")
                         .WithMany("ParcelProductLists")
-                        .HasForeignKey("Order_ID")
+                        .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("OrderManagementSystem.Models.Inventory", "Inventory")
                         .WithMany("ParcelProductLists")
-                        .HasForeignKey("Product_ID")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -843,15 +914,15 @@ namespace OrderManagementSystem.Migrations
 
             modelBuilder.Entity("OrderManagementSystem.Models.UserRole", b =>
                 {
-                    b.HasOne("OrderManagementSystem.Models.Roles", "Role")
+                    b.HasOne("OrderManagementSystem.Models.Role", "Role")
                         .WithMany("UserRoles")
-                        .HasForeignKey("Role_ID")
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("OrderManagementSystem.Models.User", "User")
                         .WithMany("UserRoles")
-                        .HasForeignKey("User_ID")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -864,9 +935,9 @@ namespace OrderManagementSystem.Migrations
                 {
                     b.Navigation("Billings");
 
-                    b.Navigation("Cost_Based_Billings");
+                    b.Navigation("CostBasedBillings");
 
-                    b.Navigation("Order_Based_Billings");
+                    b.Navigation("OrderBasedBillings");
                 });
 
             modelBuilder.Entity("OrderManagementSystem.Models.FreightOutbound", b =>
@@ -874,7 +945,7 @@ namespace OrderManagementSystem.Migrations
                     b.Navigation("FreightProductLists");
                 });
 
-            modelBuilder.Entity("OrderManagementSystem.Models.InboundOrders", b =>
+            modelBuilder.Entity("OrderManagementSystem.Models.InboundOrder", b =>
                 {
                     b.Navigation("InboundProductLists");
                 });
@@ -885,7 +956,14 @@ namespace OrderManagementSystem.Migrations
 
                     b.Navigation("InboundProductLists");
 
+                    b.Navigation("OrderItems");
+
                     b.Navigation("ParcelProductLists");
+                });
+
+            modelBuilder.Entity("OrderManagementSystem.Models.Order", b =>
+                {
+                    b.Navigation("OrderItems");
                 });
 
             modelBuilder.Entity("OrderManagementSystem.Models.ParcelOutbound", b =>
@@ -893,7 +971,7 @@ namespace OrderManagementSystem.Migrations
                     b.Navigation("ParcelProductLists");
                 });
 
-            modelBuilder.Entity("OrderManagementSystem.Models.Roles", b =>
+            modelBuilder.Entity("OrderManagementSystem.Models.Role", b =>
                 {
                     b.Navigation("UserRoles");
                 });
@@ -902,7 +980,7 @@ namespace OrderManagementSystem.Migrations
                 {
                     b.Navigation("BillingAccounts");
 
-                    b.Navigation("Billings");
+                    b.Navigation("Orders");
 
                     b.Navigation("UserRoles");
                 });

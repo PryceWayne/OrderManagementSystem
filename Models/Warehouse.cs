@@ -6,7 +6,7 @@ namespace OrderManagementSystem.Models
     public class Warehouse
     {
         [Key]
-        public string Warehouse_ID { get; set; } // Primary Key
+        public string WarehouseId { get; set; } 
 
         [Required]
         [StringLength(50)]
@@ -23,7 +23,7 @@ namespace OrderManagementSystem.Models
 
         // Navigation Properties
         public ICollection<Inventory> Inventories { get; set; } = new List<Inventory>();
-        public ICollection<InboundOrders> InboundOrders { get; set; } = new List<InboundOrders>();
+        public ICollection<InboundOrder> InboundOrders { get; set; } = new List<InboundOrder>();
         public ICollection<FreightOutbound> FreightOutbounds { get; set; } = new List<FreightOutbound>();
         public ICollection<ParcelOutbound> ParcelOutbounds { get; set; } = new List<ParcelOutbound>();
     }

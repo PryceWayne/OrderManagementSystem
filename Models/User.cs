@@ -7,7 +7,8 @@ namespace OrderManagementSystem.Models
     public class User
     {
         [Key]
-        public string User_ID { get; set; } // Primary Key
+        [StringLength(25)]
+        public string UserId { get; set; }
 
         [Required]
         [StringLength(25)]
@@ -15,18 +16,18 @@ namespace OrderManagementSystem.Models
 
         [Required]
         [StringLength(255)]
-        public string Password { get; set; } // Passwords should be hashed
+        public string Password { get; set; } 
 
         [Required]
         [EmailAddress]
         [StringLength(255)]
         public string Email { get; set; }
 
-        public DateTime Date_Created { get; set; }
+        public DateTime DateCreated { get; set; }
 
         // Navigation Properties
-        public ICollection<Billing> Billings { get; set; } = new List<Billing>();
         public ICollection<BillingAccount> BillingAccounts { get; set; } = new List<BillingAccount>();
         public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
+        public ICollection<Order> Orders { get; set; } = new List<Order>(); 
     }
 }

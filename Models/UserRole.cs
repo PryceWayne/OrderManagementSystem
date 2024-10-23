@@ -1,15 +1,17 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Data;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace OrderManagementSystem.Models
 {
     public class UserRole
     {
-        public string User_ID { get; set; } // Foreign Key to User
-        public string Role_ID { get; set; } // Foreign Key to Role
+        [Required]
+        public string UserId { get; set; } 
 
-        // Navigation properties
+        [Required]
+        public string RoleId { get; set; } 
+
+       
         public User User { get; set; }
-        public Roles Role { get; set; }
+        public Role Role { get; set; }
     }
 }

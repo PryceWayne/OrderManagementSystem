@@ -5,7 +5,7 @@ namespace OrderManagementSystem.Models
     public class Cost
     {
         [Key]
-        public string Cost_ID { get; set; } // Primary key
+        public string CostId { get; set; } 
 
         public double Amount { get; set; }
 

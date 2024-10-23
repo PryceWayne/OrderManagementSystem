@@ -7,27 +7,27 @@ namespace OrderManagementSystem.Models
     public class FreightOutbound
     {
         [Key]
-        public string Outbound_Order_ID { get; set; } // Primary Key
+        public string OutboundOrderId { get; set; } 
 
         [StringLength(25)]
-        public string Order_Type { get; set; }
+        public string OrderType { get; set; } 
 
         [StringLength(25)]
-        public string Order_Status { get; set; }
+        public string OrderStatus { get; set; } 
 
         [Required]
-        public string Creator { get; set; } // Foreign Key to User
+        public string CreatorId { get; set; } 
 
         [Required]
-        public string Warehouse_ID { get; set; } // Foreign Key to Warehouse
+        public string WarehouseId { get; set; } 
 
-        public int Product_Quantity { get; set; }
+        public int ProductQuantity { get; set; } 
 
-        public DateTime Creation_Date { get; set; }
+        public DateTime CreationDate { get; set; } 
 
-        public DateTime Estimated_Delivery_Date { get; set; }
+        public DateTime EstimatedDeliveryDate { get; set; } 
 
-        public DateTime Order_Ship_Date { get; set; }
+        public DateTime OrderShipDate { get; set; } 
 
         public double Cost { get; set; }
 
@@ -38,40 +38,34 @@ namespace OrderManagementSystem.Models
         public string Recipient { get; set; }
 
         [StringLength(50)]
-        public string Recipient_Post_Code { get; set; }
+        public string RecipientPostCode { get; set; } 
 
         [StringLength(50)]
-        public string Destination_Type { get; set; }
+        public string DestinationType { get; set; } 
 
         [StringLength(50)]
         public string Platform { get; set; }
 
         [StringLength(50)]
-        public string Shipping_Company { get; set; }
+        public string ShippingCompany { get; set; }
 
-        public int Transport_Days { get; set; }
+        public int TransportDays { get; set; } 
 
         [StringLength(25)]
-        public string Related_Adjustment_Order { get; set; }
+        public string RelatedAdjustmentOrder { get; set; } 
 
         [StringLength(255)]
-        public string Tracking_Number { get; set; }
+        public string TrackingNumber { get; set; } 
 
         [StringLength(255)]
-        public string Reference_Order_Number { get; set; }
+        public string ReferenceOrderNumber { get; set; } 
 
         [StringLength(25)]
-        public string FBA_Shipment_ID { get; set; }
-
-        [StringLength(25)]
-        public string FBA_Tracking_Number { get; set; }
-
-        [StringLength(25)]
-        public string Outbound_Method { get; set; }
+        public string OutboundMethod { get; set; } 
 
         // Navigation Properties
         public Warehouse Warehouse { get; set; }
-        public User User { get; set; } // Assuming you have a navigation property to User
+        public User Creator { get; set; }
 
         public ICollection<FreightProductList> FreightProductLists { get; set; } = new List<FreightProductList>();
     }

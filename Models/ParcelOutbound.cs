@@ -7,28 +7,28 @@ namespace OrderManagementSystem.Models
     public class ParcelOutbound
     {
         [Key]
-        public string Order_ID { get; set; }  // Primary Key
+        public string OrderId { get; set; } // Changed from 'Order_ID'
 
         [StringLength(25)]
-        public string Order_Type { get; set; }
+        public string OrderType { get; set; } // Changed from 'Order_Type'
 
         [StringLength(25)]
-        public string Order_Status { get; set; }
+        public string OrderStatus { get; set; } // Changed from 'Order_Status'
 
         [Required]
-        public string Warehouse_ID { get; set; } // Foreign Key to Warehouse
+        public string WarehouseId { get; set; } // Changed from 'Warehouse_ID'
 
         [Required]
-        public string Creator { get; set; } // Foreign Key to User
+        public string CreatorId { get; set; } // Changed from 'Creator'
 
         [StringLength(50)]
         public string Platform { get; set; }
 
-        public DateTime Estimated_Delivery_Date { get; set; }
+        public DateTime EstimatedDeliveryDate { get; set; } // Changed from 'Estimated_Delivery_Date'
 
-        public DateTime Ship_Date { get; set; }
+        public DateTime ShipDate { get; set; } // Changed from 'Ship_Date'
 
-        public int Transport_Days { get; set; }
+        public int TransportDays { get; set; } // Changed from 'Transport_Days'
 
         public double Cost { get; set; }
 
@@ -45,33 +45,33 @@ namespace OrderManagementSystem.Models
         public string Postcode { get; set; }
 
         [StringLength(25)]
-        public string Tracking_Number { get; set; }
+        public string TrackingNumber { get; set; } // Changed from 'Tracking_Number'
 
         [StringLength(25)]
-        public string Reference_Order_Number { get; set; }
+        public string ReferenceOrderNumber { get; set; } // Changed from 'Reference_Order_Number'
 
-        public DateTime Creation_Date { get; set; }
+        public DateTime CreationDate { get; set; } // Changed from 'Creation_Date'
 
         public int Boxes { get; set; }
 
         [StringLength(50)]
-        public string Shipping_Company { get; set; }
+        public string ShippingCompany { get; set; }
 
         [StringLength(255)]
-        public string Latest_Information { get; set; }
+        public string LatestInformation { get; set; } 
 
-        public DateTime Tracking_Update_Time { get; set; }
+        public DateTime TrackingUpdateTime { get; set; } 
 
-        public DateTime Internet_Posting_Time { get; set; }
+        public DateTime InternetPostingTime { get; set; } 
 
-        public DateTime Delivery_Time { get; set; }
+        public DateTime DeliveryTime { get; set; } 
 
         [StringLength(25)]
-        public string Related_Adjustment_Order { get; set; }
+        public string RelatedAdjustmentOrder { get; set; } 
 
         // Navigation Properties
         public Warehouse Warehouse { get; set; }
-        public User User { get; set; } // Assuming you have a navigation property to User
+        public User Creator { get; set; }
 
         public ICollection<ParcelProductList> ParcelProductLists { get; set; } = new List<ParcelProductList>();
     }

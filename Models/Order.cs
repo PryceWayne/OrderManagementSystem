@@ -1,15 +1,35 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace OrderManagementSystem.Models
 {
     public class Order
     {
-        public string OrderId { get; set; }  // Unique identifier for the order
-        public string UserId { get; set; }   // Foreign key reference to User
-        public DateTime OrderDate { get; set; } // Date the order was created
-        public decimal TotalAmount { get; set; } // Total cost of the order
+        [Key]
+        [StringLength(25)]
+        public string OrderId { get; set; }
 
-        // Optional: Navigation property for the related user
-        public User User { get; set; }
+        [Required]
+        [StringLength(25)]
+        public string CustomerId { get; set; }
+
+        [Required]
+        [StringLength(25)]
+        public string UserId { get; set; } 
+
+        [Required]
+        public DateTime OrderDate { get; set; }
+
+        public DateTime? ShippedDate { get; set; }
+
+        [StringLength(25)]
+        public string OrderStatus { get; set; }
+
+        public double TotalAmount { get; set; }
+
+        // Navigation Properties
+        public User User { get; set; } 
+        public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
     }
 }

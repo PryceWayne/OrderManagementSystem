@@ -6,10 +6,10 @@ namespace OrderManagementSystem.Models
     public class Billing
     {
         [Key]
-        public string Billing_ID { get; set; }  // Primary Key
+        public string BillingId { get; set; } 
 
         [Required]
-        public string Billing_Account_ID { get; set; } // Foreign Key to BillingAccount
+        public string BillingAccountId { get; set; } 
 
         public double Amount { get; set; }
 

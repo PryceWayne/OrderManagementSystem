@@ -1,16 +1,19 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace OrderManagementSystem.Models
 {
     public class InboundProductList
     {
-        public string Order_ID { get; set; } // Foreign Key to InboundOrders
-        public string Product_ID { get; set; } // Foreign Key to Inventory
+        [Required]
+        public string OrderId { get; set; } 
+
+        [Required]
+        public string ProductId { get; set; } 
 
         public int Quantity { get; set; }
 
         // Navigation Properties
-        public InboundOrders InboundOrder { get; set; }
+        public InboundOrder InboundOrder { get; set; }
         public Inventory Inventory { get; set; }
     }
 }
