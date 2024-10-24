@@ -176,9 +176,22 @@ CREATE TABLE Parcel_Product_List (
 
 CREATE TABLE Platform_Order (
     Order_ID VARCHAR(25) PRIMARY KEY,
-    Warehouse_ID VARCHAR(25),
-    User_ID VARCHAR(25),
     Platform VARCHAR(25),
+    Warehouse_ID VARCHAR(25),
+    Product_Quantity INT,
+    User_ID VARCHAR(25),
+    Buyer VARCHAR(25),
+    Recipient_Postcode VARCHAR(25),
+    Recipient_Country VARCHAR(25),
+    Store VARCHAR(25),
+    Site VARCHAR(25),
+    Shipping_Service VARCHAR(25),
+    Tracking_Number VARCHAR(255),
+    Carrier VARCHAR(25),
+    Order_Time DATETIME, 
+    Payment_Time DATETIME,
+    Created_Time DATETIME,
+    Order_Source VARCHAR(25),
     FOREIGN KEY (Warehouse_ID) REFERENCES Warehouse(Warehouse_ID),
     FOREIGN KEY (User_ID) REFERENCES Users(User_ID)
 );
@@ -297,13 +310,14 @@ INSERT INTO Parcel_Product_List (Order_ID, Product_ID, Quantity) VALUES
     ('PO003', 'P003', '15'),
     ('PO004', 'P004', '20'),
     ('PO005', 'P005', '25');
+    
+INSERT INTO Platform_Order (Order_ID, Platform, Warehouse_ID, Product_Quantity, User_ID, Buyer, Recipient_Postcode, Recipient_Country, Store, Site, Shipping_Service, Tracking_Number, Carrier, Order_Time, Payment_Time, Created_Time, Order_Source) VALUES
+    ('PFO001', 'Amazon', 'W001', 2, 'U001', 'Buyer1', '12345', 'USA', 'Store1', 'Site1', 'FedEx', 'TN001', 'iMile', '2024-10-01 10:00:00', '2024-10-01 10:05:00', '2024-10-01 09:55:00', 'Online'),
+    ('PFO002', 'eBay', 'W001', 1, 'U002', 'Buyer2', '67890', 'USA', 'Store2', 'Site2', 'DHL', 'TN002', 'iMile', '2024-10-02 11:00:00', '2024-10-02 11:05:00', '2024-10-02 10:55:00', 'Online'),
+    ('PFO003', 'TikTok', 'W001', 3, 'U003', 'Buyer3', '54321', 'USA', 'Store3', 'Site3', 'UPS', 'TN003', 'UPS', '2024-10-03 12:00:00', '2024-10-03 12:05:00', '2024-10-03 11:55:00', 'Online'),
+    ('PFO004', 'Etsy', 'W001', 1, 'U004', 'Buyer4', '98765', 'USA', 'Store4', 'Site4', 'USPS', 'TN004', 'iMile', '2024-10-04 13:00:00', '2024-10-04 13:05:00', '2024-10-04 12:55:00', 'Online'),
+    ('PFO005', 'Target', 'W001', 4, 'U005', 'Buyer5', '45678', 'USA', 'Store5', 'Site5', 'FedEx', 'TN005', 'iMile', '2024-10-05 14:00:00', '2024-10-05 14:05:00', '2024-10-05 13:55:00', 'Online');
 
-INSERT INTO Platform_Order (Order_ID, Warehouse_ID, User_ID, Platform) VALUES
-    ('PFO001', 'W001', 'U001', 'Amazon'),
-    ('PFO002', 'W001', 'U001', 'eBay'),
-    ('PFO003', 'W001', 'U001', 'TikTok'),
-    ('PFO004', 'W001', 'U001', 'Etsy'),
-    ('PFO005', 'W001', 'U001', 'Target');
     
 INSERT INTO Roles (Role_ID, Role, Role_Description) VALUES
     ('R001', 'Seller', 'Grants seller access'),
@@ -414,9 +428,22 @@ SELECT * FROM Freight;
 CREATE VIEW Platform_Orders AS 
 SELECT 
     Order_ID AS "Order ID", 
-    USERS.Username AS "Creator", 
+    Platform,
     Warehouse.Warehouse,
-    Platform
+    Product_Quantity AS "Product Quantity",
+    USERS.Username AS "Creator",
+    Buyer,
+    Recipient_Postcode AS "Recipient Postcode",
+    Recipient_Country AS "Recipient Country",
+    Store,
+    Site,
+    Shipping_Service AS "Shipping Service",
+    Tracking_Number AS "Tracking Number",
+    Carrier,
+    Order_Time AS "Order Time",
+    Payment_Time AS "Payment Time",
+    Created_Time AS "Created Time",
+    Order_Source AS "Order Source"
 FROM 
     Platform_Order 
 INNER JOIN 
