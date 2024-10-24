@@ -184,8 +184,16 @@ CREATE TABLE Platform_Order (
     FOREIGN KEY (User_ID) REFERENCES Users(User_ID)
 );
 
+CREATE TABLE Platform_Product_List(
+	Order_ID VARCHAR(25),
+    Product_ID VARCHAR(25),
+    Quantity INT,
+    FOREIGN KEY (Product_ID) REFERENCES Inventory(Product_ID),
+    FOREIGN KEY (Order_ID) REFERENCES Platform_Order(Order_ID)
+);
+
 CREATE TABLE Customer (
-    Customer_ID VARCHAR(25) PRIMARY KEY,
+    User_ID VARCHAR(25) PRIMARY KEY,
     Admin_ID VARCHAR(25),
     Company_Name VARCHAR(50),
     Customer_Status VARCHAR(25),
@@ -545,3 +553,17 @@ LEFT JOIN
     Charge ON Billing.Charge_ID = Charge.Charge_ID;
     
 SELECT * FROM Billing_List;
+
+# Copy for parcel outbound, freight putbound, platform order
+CREATE VIEW Order_Products AS
+SELECT
+	Inbound_Orders.Inbound_Order_ID,
+    Inventory.Product_Name AS "Product" ,
+    Inbound_Product_List.Quantity
+FROM 
+	Inbound_Orders
+JOIN
+	Inbound_Product_List ON Inbound_Product_List.Order_ID = Inbound_Orders.Inbound_Order_ID
+JOIN 
+	Inventory ON Inventory.Product_ID=Inbound_Product_List.Product_ID;
+SELECT * FROM Order_Products WHERE Inbound_Order_ID= "IO001";
