@@ -31,29 +31,17 @@ CREATE TABLE Billing_Account (
     FOREIGN KEY (User_ID) REFERENCES USERS(User_ID)
 );
 
-CREATE TABLE Cost_Based_Charges (
-    Cost_Charge_ID VARCHAR(25) PRIMARY KEY,
-    Amount FLOAT,
-    Description VARCHAR(255)
+CREATE TABLE Charge (
+	Charge_ID varchar(25) PRIMARY KEY,
+    Amount float,
+    Charge_Type varchar(25),
+    Description varchar(255)
 );
 
-CREATE TABLE Order_Based_Charges (
-    Order_Charge_ID VARCHAR(25) PRIMARY KEY,
-    Amount FLOAT,
-    Description VARCHAR(255)
-);
-
-CREATE TABLE Cost_Based_Billing (
-    Billing_Account_ID VARCHAR(25),
-    Cost_Charge_ID VARCHAR(25),
-    FOREIGN KEY (Cost_Charge_ID) REFERENCES Cost_Based_Charges(Cost_Charge_ID),
-    FOREIGN KEY (Billing_Account_ID) REFERENCES Billing_Account(Billing_Account_ID)
-);
-
-CREATE TABLE Order_Based_Billing (
-    Billing_Account_ID VARCHAR(25),
-    Order_Charge_ID VARCHAR(25),
-    FOREIGN KEY (Order_Charge_ID) REFERENCES Order_Based_Charges(Order_Charge_ID),
+CREATE TABLE Billing (
+	Billing_Account_ID VARCHAR(25),
+    Charge_ID VARCHAR(25),
+    FOREIGN KEY (Charge_ID) REFERENCES Charge(Charge_ID),
     FOREIGN KEY (Billing_Account_ID) REFERENCES Billing_Account(Billing_Account_ID)
 );
 
@@ -241,14 +229,14 @@ INSERT INTO Billing_Account (Billing_Account_ID, User_ID, Account_Balance) VALUE
     ('BA004', 'U004', '150'),
     ('BA005', 'U005', '600');
 	
-INSERT INTO Cost_Based_Charges (Cost_Charge_ID, Amount, Description) VALUES
-    ('CC001', '50', 'Charge 1'),
-    ('CC002', '20', 'Charge 2'),
-    ('CC003', '15', 'Charge 3'),
-    ('CC004', '30', 'Charge 4'),
-    ('CC005', '45', 'Charge 5');
+INSERT INTO Charge (Charge_ID, Amount, Charge_Type, Description) VALUES
+    ('CC001', '50', 'Order-Based', 'Charge 1'),
+    ('CC002', '20', 'Order-Based', 'Charge 2'),
+    ('CC003', '15', 'Order-Based', 'Charge 3'),
+    ('CC004', '30', 'Cost-Based','Charge 4'),
+    ('CC005', '45', 'Cost-Based','Charge 5');
 
-INSERT INTO Cost_Based_Billing (Billing_Account_ID, Cost_Charge_ID) VALUES
+INSERT INTO Billing (Billing_Account_ID, Charge_ID) VALUES
     ('BA001', 'CC001'),
     ('BA002', 'CC002'),
     ('BA003', 'CC003'),
@@ -282,20 +270,6 @@ INSERT INTO Inbound_Product_List (Order_ID, Product_ID, Quantity) VALUES
     ('IO003', 'P003', 100),
     ('IO004', 'P004', 25),
     ('IO005', 'P005', 60);
-        
-INSERT INTO Order_Based_Charges (Order_Charge_ID, Amount, Description) VALUES
-    ('OC001', '100.00', 'Order Charge 1'),
-    ('OC002', '150.00', 'Order Charge 2'),
-    ('OC003', '200.00', 'Order Charge 3'),
-    ('OC004', '250.00', 'Order Charge 4'),
-    ('OC005', '300.00', 'Order Charge 5');
-
-INSERT INTO Order_Based_Billing (Billing_Account_ID, Order_Charge_ID) VALUES
-    ('BA001', 'OC001'),
-    ('BA002', 'OC002'),
-    ('BA003', 'OC003'),
-    ('BA004', 'OC004'),
-    ('BA005', 'OC005');
     
 INSERT INTO Parcel_Outbound (Order_ID, Order_Status, Warehouse_ID, User_ID, Platform, Estimated_Delivery_Date, Ship_Date, Transport_Days, Cost, Currency, Recipient, Country, Postcode, Tracking_Number, Reference_Order_Number, Creation_Date, Boxes, Shipping_Company, Latest_Information, Tracking_Update_Time, Internet_Posting_Time, Delivery_Time, Related_Adjustment_Order) VALUES
     ('PO001', 'Awaiting', 'W001', 'U001', 'Amazon', '2024-10-25', '2024-10-20', 7, 120.00, 'USD', 'Michael Anderson', 'United States', '10001', '123456789', 'REFPO001', '2024-10-01', 5, 'FedEx', 'Delivered to sorting facility', '2024-10-02 14:30:00', '2024-10-02 10:00:00', '2024-10-10 16:00:00', 'RAO002'),
@@ -542,37 +516,20 @@ SELECT
     USERS.Username,
     USERS.Email,
     Billing_Account.Account_Balance AS "Billing Account Balance",
-    Cost_Based_Charges.Cost_Charge_ID AS "Charge ID",
-    Cost_Based_Charges.Description,
-    Cost_Based_Charges.Amount,
-    'Cost Based' AS "Charge Type"
+    Charge.Charge_ID AS "Charge ID",
+    Charge.Charge_Type AS "Charge Type",
+    Charge.Description,
+    Charge.Amount
 FROM 
     Billing_Account
 JOIN 
-    Cost_Based_Billing ON Billing_Account.Billing_Account_ID = Cost_Based_Billing.Billing_Account_ID
+    Billing ON Billing_Account.Billing_Account_ID = Billing.Billing_Account_ID
 JOIN 
-    Cost_Based_Charges ON Cost_Based_Billing.Cost_Charge_ID = Cost_Based_Charges.Cost_Charge_ID
-JOIN 
-    USERS ON Billing_Account.User_ID = USERS.User_ID
-UNION ALL
-SELECT 
-    Billing_Account.Billing_Account_ID,
-    USERS.Username,
-    USERS.Email,
-    Billing_Account.Account_Balance,
-    Order_Based_Charges.Order_Charge_ID AS Charge_Type,
-    Order_Based_Charges.Description AS Charge_Description,
-    Order_Based_Charges.Amount AS Charge_Amount,
-    'Order Based' AS Charge_Category
-FROM 
-    Billing_Account
-JOIN 
-    Order_Based_Billing ON Billing_Account.Billing_Account_ID = Order_Based_Billing.Billing_Account_ID
-JOIN 
-    Order_Based_Charges ON Order_Based_Billing.Order_Charge_ID = Order_Based_Charges.Order_Charge_ID
+    Charge ON Billing.Charge_ID = Charge.Charge_ID
 JOIN 
     USERS ON Billing_Account.User_ID = USERS.User_ID;
-    
+SELECT * FROM Charge_list;
+
 CREATE VIEW Billing_List AS
 SELECT 
     USERS.Username AS "User",
@@ -583,12 +540,8 @@ FROM
 JOIN 
     USERS ON Billing_Account.User_ID = USERS.User_ID
 LEFT JOIN 
-    Cost_Based_Billing ON Billing_Account.Billing_Account_ID = Cost_Based_Billing.Billing_Account_ID
+    Billing ON Billing_Account.Billing_Account_ID = Billing.Billing_Account_ID
 LEFT JOIN 
-    Cost_Based_Charges ON Cost_Based_Billing.Cost_Charge_ID = Cost_Based_Charges.Cost_Charge_ID
-LEFT JOIN 
-    Order_Based_Billing ON Billing_Account.Billing_Account_ID = Order_Based_Billing.Billing_Account_ID
-LEFT JOIN 
-    Order_Based_Charges ON Order_Based_Billing.Order_Charge_ID = Order_Based_Charges.Order_Charge_ID;
-
+    Charge ON Billing.Charge_ID = Charge.Charge_ID;
+    
 SELECT * FROM Billing_List;
