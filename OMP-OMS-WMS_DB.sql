@@ -1,7 +1,9 @@
+
 CREATE DATABASE OMS;
 USE OMS;
 
-# TABLE CREATION
+
+# Table Creation
 
 CREATE TABLE ROLES (
     Role_ID VARCHAR(25) PRIMARY KEY,
@@ -27,21 +29,33 @@ CREATE TABLE User_Roles (
 CREATE TABLE Billing_Account (
     Billing_Account_ID VARCHAR(25) PRIMARY KEY,
     User_ID VARCHAR(25),
-    Account_Balance FLOAT,
+    Account_Balance DECIMAL (10,2),
     FOREIGN KEY (User_ID) REFERENCES USERS(User_ID)
 );
 
-CREATE TABLE Charge (
-	Charge_ID varchar(25) PRIMARY KEY,
-    Amount float,
-    Charge_Type varchar(25),
-    Description varchar(255)
+CREATE TABLE Cost_Based_Charges (
+    Cost_Charge_ID VARCHAR(25) PRIMARY KEY,
+    Amount DECIMAL (10,2),
+    Description VARCHAR(255)
 );
 
-CREATE TABLE Billing (
-	Billing_Account_ID VARCHAR(25),
-    Charge_ID VARCHAR(25),
-    FOREIGN KEY (Charge_ID) REFERENCES Charge(Charge_ID),
+CREATE TABLE Order_Based_Charges (
+    Order_Charge_ID VARCHAR(25) PRIMARY KEY,
+    Amount DECIMAL (10,2),
+    Description VARCHAR(255)
+);
+
+CREATE TABLE Cost_Based_Billing (
+    Billing_Account_ID VARCHAR(25),
+    Cost_Charge_ID VARCHAR(25),
+    FOREIGN KEY (Cost_Charge_ID) REFERENCES Cost_Based_Charges(Cost_Charge_ID),
+    FOREIGN KEY (Billing_Account_ID) REFERENCES Billing_Account(Billing_Account_ID)
+);
+
+CREATE TABLE Order_Based_Billing (
+    Billing_Account_ID VARCHAR(25),
+    Order_Charge_ID VARCHAR(25),
+    FOREIGN KEY (Order_Charge_ID) REFERENCES Order_Based_Charges(Order_Charge_ID),
     FOREIGN KEY (Billing_Account_ID) REFERENCES Billing_Account(Billing_Account_ID)
 );
 
@@ -70,7 +84,7 @@ CREATE TABLE Inbound_Orders (
     Estimated_Arrival DATE, 
     Product_Quantity INT,
     Creation_Date DATE,
-    Cost FLOAT,
+    Cost DECIMAL (10,2),
     Currency VARCHAR(50),
     Boxes INT,
     Inbound_Type VARCHAR(25),
@@ -99,7 +113,7 @@ CREATE TABLE Freight_Outbound (
     Creation_Date DATE,
     Estimated_Delivery_Date DATE, 
     Order_Ship_Date DATE,
-    Cost FLOAT,
+    Cost DECIMAL (10,2),
     Currency VARCHAR(50),
     Recipient VARCHAR(100),
     Recipient_Post_Code VARCHAR(50),
@@ -135,7 +149,7 @@ CREATE TABLE Parcel_Outbound (
     Estimated_Delivery_Date DATE,
     Ship_Date DATE,
     Transport_Days INT,
-    Cost FLOAT,
+    Cost DECIMAL (10,2),
     Currency VARCHAR(25),
     Recipient VARCHAR(50),
     Country VARCHAR(50),
@@ -164,36 +178,15 @@ CREATE TABLE Parcel_Product_List (
 
 CREATE TABLE Platform_Order (
     Order_ID VARCHAR(25) PRIMARY KEY,
-    Platform VARCHAR(25),
-    Warehouse_ID VARCHAR(25),
-    Product_Quantity INT,
+    Warehouse_ID VARCHAR(25),    
     User_ID VARCHAR(25),
-    Buyer VARCHAR(25),
-    Recipient_Postcode VARCHAR(25),
-    Recipient_Country VARCHAR(25),
-    Store VARCHAR(25),
-    Site VARCHAR(25),
-    Shipping_Service VARCHAR(25),
-    Tracking_Number VARCHAR(255),
-    Carrier VARCHAR(25),
-    Order_Time DATETIME, 
-    Payment_Time DATETIME,
-    Created_Time DATETIME,
-    Order_Source VARCHAR(25),
-    FOREIGN KEY (Warehouse_ID) REFERENCES Warehouse(Warehouse_ID),
-    FOREIGN KEY (User_ID) REFERENCES Users(User_ID)
-);
-
-CREATE TABLE Platform_Product_List(
-	Order_ID VARCHAR(25),
-    Product_ID VARCHAR(25),
-    Quantity INT,
-    FOREIGN KEY (Product_ID) REFERENCES Inventory(Product_ID),
-    FOREIGN KEY (Order_ID) REFERENCES Platform_Order(Order_ID)
+    Platform VARCHAR(50),
+	FOREIGN KEY (Warehouse_ID) REFERENCES Warehouse(Warehouse_ID),   
+    FOREIGN KEY (User_ID) REFERENCES USERS(User_ID)
 );
 
 CREATE TABLE Customer (
-    User_ID VARCHAR(25) PRIMARY KEY,
+    Customer_ID VARCHAR(25) PRIMARY KEY,
     Admin_ID VARCHAR(25),
     Company_Name VARCHAR(50),
     Customer_Status VARCHAR(25),
@@ -203,11 +196,14 @@ CREATE TABLE Customer (
     Credit_Limit DECIMAL(10, 2),
     Available_Fund DECIMAL(10, 2),
     Date_Created DATE,
+    FOREIGN KEY (Customer_ID) REFERENCES USERS(User_ID),
     FOREIGN KEY (Admin_ID) REFERENCES USERS(User_ID),
     FOREIGN KEY (Billing_Account_ID) REFERENCES Billing_Account(Billing_Account_ID)
 );
 
-# INSERT DUMMY DATA
+
+# Dummy Data Entry
+
 INSERT INTO USERS (User_ID, Username, Password, Email, Date_Created) VALUES
     ('U001', 'johndoe', 'password123', 'john.doe@gmail.com', '2024-01-01'),
     ('U002', 'janedoe', 'password456', 'jane.doe@gmail.com', '2024-01-02'),
@@ -236,14 +232,14 @@ INSERT INTO Billing_Account (Billing_Account_ID, User_ID, Account_Balance) VALUE
     ('BA004', 'U004', '150'),
     ('BA005', 'U005', '600');
 	
-INSERT INTO Charge (Charge_ID, Amount, Charge_Type, Description) VALUES
-    ('CC001', '50', 'Order-Based', 'Charge 1'),
-    ('CC002', '20', 'Order-Based', 'Charge 2'),
-    ('CC003', '15', 'Order-Based', 'Charge 3'),
-    ('CC004', '30', 'Cost-Based','Charge 4'),
-    ('CC005', '45', 'Cost-Based','Charge 5');
+INSERT INTO Cost_Based_Charges (Cost_Charge_ID, Amount, Description) VALUES
+    ('CC001', '50', 'Charge 1'),
+    ('CC002', '20', 'Charge 2'),
+    ('CC003', '15', 'Charge 3'),
+    ('CC004', '30', 'Charge 4'),
+    ('CC005', '45', 'Charge 5');
 
-INSERT INTO Billing (Billing_Account_ID, Charge_ID) VALUES
+INSERT INTO Cost_Based_Billing (Billing_Account_ID, Cost_Charge_ID) VALUES
     ('BA001', 'CC001'),
     ('BA002', 'CC002'),
     ('BA003', 'CC003'),
@@ -273,11 +269,24 @@ INSERT INTO Inbound_Orders (Inbound_Order_ID, Order_Status, User_ID, Warehouse_I
 
 INSERT INTO Inbound_Product_List (Order_ID, Product_ID, Quantity) VALUES
     ('IO001', 'P001', 50),
-    ('IO001', 'P002', 20),
     ('IO002', 'P002', 75),
     ('IO003', 'P003', 100),
     ('IO004', 'P004', 25),
     ('IO005', 'P005', 60);
+        
+INSERT INTO Order_Based_Charges (Order_Charge_ID, Amount, Description) VALUES
+    ('OC001', '100.00', 'Order Charge 1'),
+    ('OC002', '150.00', 'Order Charge 2'),
+    ('OC003', '200.00', 'Order Charge 3'),
+    ('OC004', '250.00', 'Order Charge 4'),
+    ('OC005', '300.00', 'Order Charge 5');
+
+INSERT INTO Order_Based_Billing (Billing_Account_ID, Order_Charge_ID) VALUES
+    ('BA001', 'OC001'),
+    ('BA002', 'OC002'),
+    ('BA003', 'OC003'),
+    ('BA004', 'OC004'),
+    ('BA005', 'OC005');
     
 INSERT INTO Parcel_Outbound (Order_ID, Order_Status, Warehouse_ID, User_ID, Platform, Estimated_Delivery_Date, Ship_Date, Transport_Days, Cost, Currency, Recipient, Country, Postcode, Tracking_Number, Reference_Order_Number, Creation_Date, Boxes, Shipping_Company, Latest_Information, Tracking_Update_Time, Internet_Posting_Time, Delivery_Time, Related_Adjustment_Order) VALUES
     ('PO001', 'Awaiting', 'W001', 'U001', 'Amazon', '2024-10-25', '2024-10-20', 7, 120.00, 'USD', 'Michael Anderson', 'United States', '10001', '123456789', 'REFPO001', '2024-10-01', 5, 'FedEx', 'Delivered to sorting facility', '2024-10-02 14:30:00', '2024-10-02 10:00:00', '2024-10-10 16:00:00', 'RAO002'),
@@ -292,14 +301,13 @@ INSERT INTO Parcel_Product_List (Order_ID, Product_ID, Quantity) VALUES
     ('PO003', 'P003', '15'),
     ('PO004', 'P004', '20'),
     ('PO005', 'P005', '25');
-    
-INSERT INTO Platform_Order (Order_ID, Platform, Warehouse_ID, Product_Quantity, User_ID, Buyer, Recipient_Postcode, Recipient_Country, Store, Site, Shipping_Service, Tracking_Number, Carrier, Order_Time, Payment_Time, Created_Time, Order_Source) VALUES
-    ('PFO001', 'Amazon', 'W001', 2, 'U001', 'Buyer1', '12345', 'USA', 'Store1', 'Site1', 'FedEx', 'TN001', 'iMile', '2024-10-01 10:00:00', '2024-10-01 10:05:00', '2024-10-01 09:55:00', 'Online'),
-    ('PFO002', 'eBay', 'W001', 1, 'U002', 'Buyer2', '67890', 'USA', 'Store2', 'Site2', 'DHL', 'TN002', 'iMile', '2024-10-02 11:00:00', '2024-10-02 11:05:00', '2024-10-02 10:55:00', 'Online'),
-    ('PFO003', 'TikTok', 'W001', 3, 'U003', 'Buyer3', '54321', 'USA', 'Store3', 'Site3', 'UPS', 'TN003', 'UPS', '2024-10-03 12:00:00', '2024-10-03 12:05:00', '2024-10-03 11:55:00', 'Online'),
-    ('PFO004', 'Etsy', 'W001', 1, 'U004', 'Buyer4', '98765', 'USA', 'Store4', 'Site4', 'USPS', 'TN004', 'iMile', '2024-10-04 13:00:00', '2024-10-04 13:05:00', '2024-10-04 12:55:00', 'Online'),
-    ('PFO005', 'Target', 'W001', 4, 'U005', 'Buyer5', '45678', 'USA', 'Store5', 'Site5', 'FedEx', 'TN005', 'iMile', '2024-10-05 14:00:00', '2024-10-05 14:05:00', '2024-10-05 13:55:00', 'Online');
 
+INSERT INTO Platform_Order (Order_ID, Warehouse_ID, User_ID, Platform) VALUES
+    ('PFO001', 'W001', 'U001', 'Amazon'),
+    ('PFO002', 'W001', 'U001', 'eBay'),
+    ('PFO003', 'W001', 'U001', 'TikTok'),
+    ('PFO004', 'W001', 'U001', 'Etsy'),
+    ('PFO005', 'W001', 'U001', 'Target');
     
 INSERT INTO Roles (Role_ID, Role, Role_Description) VALUES
     ('R001', 'Seller', 'Grants seller access'),
@@ -314,11 +322,10 @@ INSERT INTO User_Roles (User_ID, Role_ID) VALUES
     
 SELECT * FROM Billing_Account WHERE Billing_Account_ID IN ('BA001', 'BA002');
 
-INSERT INTO Customer (User_ID, Admin_ID, Customer_Status, Company_Name, Product_Need_Audit_Free, Warehouse_Availability, Billing_Account_ID, Credit_Limit, Available_Fund, Date_Created) VALUES
+INSERT INTO Customer (Customer_ID, Admin_ID, Customer_Status, Company_Name, Product_Need_Audit_Free, Warehouse_Availability, Billing_Account_ID, Credit_Limit, Available_Fund, Date_Created) VALUES
     ('U001', 'U004', 'Enable', 'Company A', 'Yes', 1, 'BA001', '3000', '2500', '2024-04-10'),
     ('U002', 'U005', 'Enable', 'Company B', 'No', 5, 'BA002', '5000', '4250', '2024-02-20');
 
-# CREATE VIEWS
 CREATE VIEW Inbound AS 
 SELECT 
   Inbound_Order_ID AS "Order ID", 
@@ -346,7 +353,7 @@ INNER JOIN
 
 CREATE VIEW Parcel AS 
 SELECT
-	Order_ID AS "Order ID",
+	OrdeR_ID AS "Order ID",
     USERS.Username AS "Creator",
     Warehouse.Warehouse,
     Order_Status AS "Status",
@@ -410,22 +417,9 @@ SELECT * FROM Freight;
 CREATE VIEW Platform_Orders AS 
 SELECT 
     Order_ID AS "Order ID", 
-    Platform,
+    USERS.Username AS "Creator", 
     Warehouse.Warehouse,
-    Product_Quantity AS "Product Quantity",
-    USERS.Username AS "Creator",
-    Buyer,
-    Recipient_Postcode AS "Recipient Postcode",
-    Recipient_Country AS "Recipient Country",
-    Store,
-    Site,
-    Shipping_Service AS "Shipping Service",
-    Tracking_Number AS "Tracking Number",
-    Carrier,
-    Order_Time AS "Order Time",
-    Payment_Time AS "Payment Time",
-    Created_Time AS "Created Time",
-    Order_Source AS "Order Source"
+    Platform
 FROM 
     Platform_Order 
 INNER JOIN 
@@ -476,15 +470,15 @@ SELECT * FROM Inventory_List;
 
 CREATE VIEW Customer_List AS
 SELECT  
-    Customer.User_ID AS "Customer ID",
-    Customer_Users.Username AS "Customer",
+    Customer.Customer_ID AS "Customer ID",
+    Customer_User.Username AS "Customer",
     Customer.Company_Name AS "Company",
     Customer.Customer_Status AS "Status",
     Customer.Admin_ID AS "Administrator ID",
     Admin.Username AS "Administrator",
     Customer.Product_Need_Audit_Free AS "Product Need Audit Free",
     Customer.Warehouse_Availability AS "Warehouse Availability",
-    Customer.Billing_Account_ID AS "Billing Account ID",  
+    Customer.Billing_Account_ID AS "Billing Account ID",  -- Specify the table here
     Billing_Account.Account_Balance AS "Account Balance",
     Customer.Credit_Limit AS "Credit Limit",
     Customer.Available_Fund AS "Available Fund",
@@ -494,14 +488,15 @@ FROM
 JOIN  
     USERS AS Admin ON Customer.Admin_ID = Admin.User_ID
 JOIN  
-    USERS AS Customer_Users ON Customer.User_ID = Customer_Users.User_ID
+    USERS AS Customer_User ON Customer.Customer_ID = Customer_User.User_ID  -- Joining for Customer's Username
 JOIN  
-    Billing_Account ON Customer.Billing_Account_ID = Billing_Account.Billing_Account_ID;
+    Billing_Account ON Customer.Billing_Account_ID = Billing_Account.Billing_Account_ID;  -- Correct the reference to Billing_Account
+SELECT * FROM Customer_List;
 
     
 CREATE VIEW Seller_List AS
 SELECT
-	USERS.User_ID AS "User ID",
+	USERS.User_ID AS "User_ID",
     Username,
     Email,
     Password,
@@ -516,94 +511,28 @@ WHERE
 	Roles.Role = "Seller";
 SELECT * FROM Seller_List;
 
+/* CREATE VIEW Charge_List AS 
+SELECT
+	Charge_ID AS "Charge ID",
+    Charge,
+    Amount AS "Cost",
+    Type AS "Charge Type",
+    Description
+FROM
+	Charges;
+SELECT * FROM Charge_List; */
 
-CREATE VIEW Charge_List AS
-SELECT 
-    Billing_Account.Billing_Account_ID AS "Billing Account ID",
-    USERS.Username,
-    USERS.Email,
-    Billing_Account.Account_Balance AS "Billing Account Balance",
-    Charge.Charge_ID AS "Charge ID",
-    Charge.Charge_Type AS "Charge Type",
-    Charge.Description,
-    Charge.Amount
-FROM 
-    Billing_Account
-JOIN 
-    Billing ON Billing_Account.Billing_Account_ID = Billing.Billing_Account_ID
-JOIN 
-    Charge ON Billing.Charge_ID = Charge.Charge_ID
-JOIN 
-    USERS ON Billing_Account.User_ID = USERS.User_ID;
-SELECT * FROM Charge_list;
-
-CREATE VIEW Billing_List AS
-SELECT 
+/* CREATE VIEW Billing_List AS 
+SELECT
+	Billing_ID AS "Billing ID",
     USERS.Username AS "User",
-    Billing_Account.Billing_Account_ID AS "Billing Account ID",
-    Billing_Account.Account_Balance AS Account_Balance
-FROM 
-    Billing_Account
-JOIN 
-    USERS ON Billing_Account.User_ID = USERS.User_ID
-LEFT JOIN 
-    Billing ON Billing_Account.Billing_Account_ID = Billing.Billing_Account_ID
-LEFT JOIN 
-    Charge ON Billing.Charge_ID = Charge.Charge_ID;
-    
-# Copy for parcel outbound, freight outbound, platform order
-CREATE VIEW Inbound_Products AS
-SELECT
-	Inbound_Orders.Inbound_Order_ID,
-    Inventory.Product_Name AS "Product" ,
-    Inbound_Product_List.Quantity
-FROM 
-	Inbound_Orders
-JOIN
-	Inbound_Product_List ON Inbound_Product_List.Order_ID = Inbound_Orders.Inbound_Order_ID
-JOIN 
-	Inventory ON Inventory.Product_ID=Inbound_Product_List.Product_ID;
-SELECT * FROM Inbound_Products WHERE Inbound_Order_ID= "IO001";
-
-# Parcel Outbound Products
-CREATE VIEW Parcel_Products AS
-SELECT
-  Parcel_Outbound.Order_ID,
-  Inventory.Product_Name AS "Product",
-  Parcel_Product_List.Quantity
-FROM 
-  Parcel_Outbound 
-JOIN 
-  Parcel_Product_List ON Parcel_Product_List.Order_ID = Parcel_Outbound.Order_ID
-JOIN 
-  Inventory ON Inventory.Product_ID = Parcel_Product_List.Product_ID;
-SELECT * FROM Parcel_Products WHERE Order_ID= "PO001";
-
-# Freight Outbound Products
-CREATE VIEW Freight_Products AS
-SELECT
-  Freight_Outbound.Outbound_Order_ID AS `Order ID`, 
-  Inventory.Product_Name AS "Product",
-  Freight_Product_List.Quantity
-FROM 
-  Freight_Outbound 
-JOIN 
-  Freight_Product_List ON Freight_Product_List.Order_ID = Freight_Outbound.Outbound_Order_ID
-JOIN 
-  Inventory ON Inventory.Product_ID = Freight_Product_List.Product_ID;
-SELECT * FROM Freight_Products WHERE `Order ID` = "FO001";
-
-# Platform Outbound Products
-CREATE VIEW Platform_Products AS
-SELECT
-  Platform_Order.Order_ID,
-  Inventory.Product_Name AS "Product",
-  Platform_Product_List.Quantity
-FROM 
-  Platform_Order
-JOIN
-  Platform_Product_List ON Platform_Product_List.Order_ID = Platform_Order.Order_ID
-JOIN 
-  Inventory ON Inventory.Product_ID = Platform_Product_List.Product_ID;
-SELECT * FROM Platform_Products WHERE Order_ID = "PFO001";
-
+    Charges.Charge
+FROM
+	Billing
+INNER JOIN
+	Billing_Account ON Billing.Billing_Account_ID = Billing_Account.Billing_Account_ID
+INNER JOIN
+	Charges ON Billing.Charge_ID = Charges.Charge_ID
+INNER JOIN
+	USERS ON USERS.User_ID = Billing_Account.User_ID;
+SELECT * FROM Billing_List; */
